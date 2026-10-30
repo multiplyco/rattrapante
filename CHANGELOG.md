@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1 — 2026-10-30
+
+- The release JAR carries Linux x86-64 and ARM64 native libraries beside macOS
+  ARM64. 0.1.0 shipped only the macOS library, so loading it on Linux failed.
+  The Linux libraries are built from the same pinned source in
+  `rust:1.90.0-slim-bookworm` (pinned by digest) and need glibc 2.34 or newer.
+- `bb native:linux` builds both Linux libraries in Docker; `bb build` builds
+  every platform's library and refuses to produce a JAR missing one.
+
 ## 0.1.0 — 2026-10-30
 
 First release. Requires JDK 25+ and Clojure 1.12+. The release JAR supports

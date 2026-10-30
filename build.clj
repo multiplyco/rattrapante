@@ -4,7 +4,7 @@
 
 
 (def lib 'co.multiply/rattrapante)
-(def version "0.1.0")
+(def version "0.1.1")
 (def class-dir "target/classes")
 (def jar-file (format "target/%s-%s.jar" (name lib) version))
 (def basis (delay (b/create-basis {:project "deps.edn"})))
@@ -24,11 +24,24 @@
             :javac-opts ["--release" "25" "-Xlint:all"]}))
 
 
+(def native-libraries
+  "The native libraries a release JAR must carry, one per supported platform."
+  ["darwin-aarch64/libautomerge_core.dylib"
+   "linux-x86_64/libautomerge_core.so"
+   "linux-aarch64/libautomerge_core.so"])
+
+
 (defn native
+  "Build the native libraries of every supported platform: this machine's, and Linux's in Docker."
   [_]
-  (let [result (b/process {:command-args ["bb" "script/native.clj"]})]
+  (let [result (b/process {:command-args ["bb" "script/native.clj" "all"]})]
     (when-not (zero? (:exit result))
-      (throw (ex-info "Native build failed" result)))))
+      (throw (ex-info "Native build failed" result))))
+  (let [missing (remove #(.exists (java.io.File. (str "resources/co/multiply/rattrapante/native/" %)))
+                  native-libraries)]
+    (when (seq missing)
+      (throw (ex-info "A release JAR needs every platform's native library; build it on an Apple silicon Mac with Docker"
+               {:missing (vec missing)})))))
 
 
 (defn jar

@@ -10,7 +10,7 @@ An explicit `materialize` operation copies a subtree into persistent Clojure dat
 Dependency (JDK 25+, Clojure 1.12+, macOS ARM64):
 
 ```clojure
-co.multiply/rattrapante {:mvn/version "0.1.0"}
+co.multiply/rattrapante {:mvn/version "0.1.1"}
 ```
 
 ## Build and use locally
@@ -47,11 +47,13 @@ are included in the generated exact Java bindings.
 Source and compiler outputs stay under `target/`; generated native resources
 are ignored by Git. Meld is not a dependency.
 
-The release JAR supports **macOS ARM64** and extracts its native binary when
-loaded. A local build includes the current platform's native binary. The build
-recipe also recognizes Linux x86-64/ARM64 and Windows x86-64/ARM64, but those builds
-have not been tested.
-A portable artifact will need verified binaries for each additional platform.
+The release JAR supports **macOS ARM64** and **Linux x86-64/ARM64** (glibc 2.34
+or newer), and extracts its native binary when loaded. `bb native` builds this
+machine's binary; `bb native:linux` builds both Linux binaries in Docker, in
+pinned `rust:1.90.0-slim-bookworm` images, with Cargo's registry and target
+directories kept in Docker volumes. `bb build` builds all three and refuses to
+produce a JAR missing any of them, so releases are built on an Apple silicon Mac
+with Docker. The build recipe also recognizes Windows x86-64/ARM64, untested.
 
 ## Coding-agent skill
 
@@ -399,10 +401,11 @@ bb build
 ```
 
 Verify the resulting JAR on every claimed native target. `bb install` installs
-locally. Henrik runs publication after committing the release changes:
-`bb tag` creates and pushes `v<version>` to
-`git@github.com:multiplyco/rattrapante.git`, and `bb deploy` builds and uploads to
-Clojars using `CLOJARS_DEPLOY_MAVEN_USERNAME` and `CLOJARS_DEPLOY_MAVEN_PASSWORD`.
-These are separate commands; preparation and verification do not publish anything.
+locally. After committing the release changes, Henrik runs `bb deploy`: it checks
+version consistency, creates and pushes `v<version>` to
+`git@github.com:multiplyco/rattrapante.git`, then builds and uploads to Clojars
+using `CLOJARS_DEPLOY_MAVEN_USERNAME` and `CLOJARS_DEPLOY_MAVEN_PASSWORD`.
+`bb tag` remains available for tagging separately; it is not a prerequisite for
+`bb deploy`. Preparation and verification do not publish anything.
 
 EPL-2.0 for Rattrapante. Automerge is MIT-licensed; its notice is included in the JAR.

@@ -1,6 +1,6 @@
 {
   "name": "rattrapante",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An explicit Clojure interface to Automerge: transaction scope, document-owned handles, collaborative text, persistence, acknowledged deltas and peer sync.",
   "author": {
     "name": "Multiply",

@@ -10,7 +10,7 @@ description: >-
 # Rattrapante
 
 **Repository:** https://github.com/multiplyco/rattrapante —
-`co.multiply/rattrapante {:mvn/version "0.1.0"}`.
+`co.multiply/rattrapante {:mvn/version "0.1.1"}`.
 Requires JDK 25+, Clojure 1.12+ and `--enable-native-access=ALL-UNNAMED` on the JVM.
 The release JAR supports macOS ARM64. Linux and Windows build recipes exist but
 are not verified release targets. Native resources are GC-managed.
