@@ -1,0 +1,15 @@
+{
+  "name": "rattrapante",
+  "description": "Claude Code plugin for co.multiply/rattrapante, an explicit Clojure interface to Automerge.",
+  "owner": {
+    "name": "Multiply",
+    "url": "https://github.com/multiplyco"
+  },
+  "plugins": [
+    {
+      "name": "rattrapante",
+      "source": "./plugins/rattrapante",
+      "description": "Use Rattrapante documents, changes, collaborative text, persistence and synchronization correctly."
+    }
+  ]
+}

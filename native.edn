@@ -1,0 +1,8 @@
+{:release "js/automerge-3.5.0"
+ :commit "4d2a8f6bfecfb7f1e4fca126e6d2122ac526f903"
+ :rust-core "0.12.0"
+ :c-api "0.2.2"
+ :archive-url "https://api.github.com/repos/automerge/automerge/tarball/js/automerge-3.5.0"
+ :archive-sha256 "5df598d387d94b605af43e0208ea2a1ce7f3535e274aa98a02c958ebc11cde0e"
+ :rust-toolchain "1.90.0"
+ :features "automerge/utf16-indexing"}

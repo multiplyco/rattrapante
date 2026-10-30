@@ -1,0 +1,13 @@
+{
+  "name": "rattrapante",
+  "version": "0.1.0",
+  "description": "An explicit Clojure interface to Automerge: transaction scope, document-owned handles, collaborative text, persistence, acknowledged deltas and peer sync.",
+  "author": {
+    "name": "Multiply",
+    "url": "https://github.com/multiplyco"
+  },
+  "homepage": "https://github.com/multiplyco/rattrapante",
+  "repository": "https://github.com/multiplyco/rattrapante",
+  "license": "EPL-2.0",
+  "keywords": ["clojure", "automerge", "crdt", "collaboration", "synchronization"]
+}

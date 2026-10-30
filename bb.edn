@@ -1,0 +1,32 @@
+{:tasks
+ {native {:doc "Build the pinned native library from source" :task (shell "bb script/native.clj")}
+  java {:doc "Compile Java FFM support for JDK 25" :task (shell "clojure -T:build compile-java")}
+  dev {:depends [native java]
+       :task (shell "clojure -M:dev -m nrepl.cmdline --interactive")}
+  test {:doc "Run correctness and native lifetime tests" :depends [native java]
+        :task (apply shell "clojure" "-M:test" *command-line-args*)}
+  bench {:doc "Local synthetic load/apply/save probe: hello, note, history or large"
+         :depends [native java]
+         :task (apply shell "clojure" "-J--enable-native-access=ALL-UNNAMED"
+                 "-J-Xms128m" "-J-Xmx512m" "-M" "script/bench.clj" *command-line-args*)}
+  build {:doc "Build a JAR including the current platform's native library"
+         :task (shell "clojure -T:build jar")}
+  install {:task (shell "clojure -T:build install")}
+  version:check
+  {:doc "Check the library, documentation and plugin versions agree"
+   :task (load-file "script/version_check.clj")}
+  tag {:depends [version:check] :task (shell "clojure -T:build tag")}
+  deploy {:doc "Build and deploy to Clojars (Henrik runs this)" :depends [version:check]
+          :task (shell "clojure -T:build deploy")}
+  bindings {:doc "Regenerate exact FFM bindings from downloaded source" :depends [native]
+            :task (shell "bb script/generate_bindings.clj")}
+  interop {:doc "Verify file and sync interoperability with official Automerge JS 3.5.0"
+           :depends [native java]
+           :task (do (shell "npm install --prefix target/interop --ignore-scripts --no-audit --no-fund --save-exact @automerge/automerge@3.5.0")
+                     (shell "clojure -J--enable-native-access=ALL-UNNAMED -M script/interop.clj"))}
+  lint {:task (shell "clj-kondo --lint src test script build.clj")}
+  lint:reflection {:doc "Compile all library namespaces and emit reflection warnings"
+                   :depends [java]
+                   :task (shell "clojure -J--enable-native-access=ALL-UNNAMED -M script/lint_reflection.clj")}
+  format:check {:task (shell "cljstyle check src test script build.clj resources/clj-kondo.exports")}
+  format:fix {:task (shell "cljstyle fix src test script build.clj resources/clj-kondo.exports")}}}

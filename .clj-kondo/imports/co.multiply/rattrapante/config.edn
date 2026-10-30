@@ -1,0 +1,1 @@
+{:hooks {:analyze-call {co.multiply.rattrapante/with-change hooks.rattrapante/with-change}}}
